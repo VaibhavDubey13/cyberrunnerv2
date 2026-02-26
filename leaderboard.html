@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard — Cyber Mario Runner</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script src="https://pl28792880.effectivegatecpm.com/69/d3/e5/69d3e52d1537e1e4a809105c43df9bb1.js"></script>
+<style>
+  :root{--cyan:#00f5ff;--pink:#ff006e;--yellow:#ffbe0b;--dark:#020010;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--dark);color:#fff;font-family:'Orbitron',monospace;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:50px 50px;animation:gm 6s linear infinite;z-index:0;pointer-events:none;}
+  @keyframes gm{to{background-position:50px 50px;}}
+  body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);pointer-events:none;z-index:1000;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:500;background:rgba(2,0,16,.92);border-bottom:1px solid rgba(0,245,255,.2);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;}
+  .nav-logo{font-size:13px;font-weight:900;color:var(--cyan);text-shadow:0 0 10px var(--cyan);text-decoration:none;letter-spacing:2px;}
+  .nav-links{display:flex;gap:28px;}
+  .nav-links a{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.5);text-decoration:none;transition:.2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
+  .nav-play{background:var(--pink);color:#fff;border:none;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;letter-spacing:2px;padding:8px 20px;border-radius:3px;cursor:pointer;text-decoration:none;box-shadow:0 0 15px rgba(255,0,110,.4);transition:.2s;}
+  .nav-play:hover{background:#ff3388;}
+
+  .page{position:relative;z-index:10;padding:90px 40px 60px;max-width:900px;margin:0 auto;}
+
+  .page-title{font-size:clamp(24px,4vw,48px);font-weight:900;color:var(--yellow);text-shadow:0 0 20px var(--yellow);letter-spacing:4px;margin-bottom:4px;text-align:center;}
+  .page-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);letter-spacing:3px;text-align:center;margin-bottom:48px;}
+
+  /* Personal score card */
+  .my-score-card{background:rgba(0,245,255,.05);border:1px solid rgba(0,245,255,.3);border-radius:8px;padding:24px 32px;margin-bottom:32px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 0 30px rgba(0,245,255,.1);}
+  .msc-label{font-size:9px;letter-spacing:3px;color:rgba(0,245,255,.6);margin-bottom:6px;font-family:'Share Tech Mono',monospace;}
+  .msc-score{font-size:36px;font-weight:900;color:var(--yellow);text-shadow:0 0 15px var(--yellow);font-family:'Share Tech Mono',monospace;}
+  .msc-rank{font-size:48px;font-weight:900;color:var(--cyan);text-shadow:0 0 20px var(--cyan);font-family:'Share Tech Mono',monospace;}
+
+  /* Leaderboard table */
+  .lb-table{width:100%;border-collapse:collapse;}
+  .lb-table thead tr{border-bottom:2px solid var(--cyan);}
+  .lb-table thead th{padding:12px 16px;font-size:8px;letter-spacing:3px;color:rgba(0,245,255,.6);text-align:left;font-weight:400;}
+  .lb-table tbody tr{border-bottom:1px solid rgba(0,245,255,.08);transition:.2s;cursor:default;}
+  .lb-table tbody tr:hover{background:rgba(0,245,255,.05);}
+  .lb-table tbody td{padding:14px 16px;font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,255,255,.7);}
+  .rank-1 td{color:var(--yellow)!important;}
+  .rank-2 td{color:#c0c0c0!important;}
+  .rank-3 td{color:#cd7f32!important;}
+  .rank-num{font-weight:900;font-size:16px;width:48px;}
+  .score-val{font-size:16px;font-weight:700;color:#fff!important;}
+  .rank-1 .score-val{color:var(--yellow)!important;text-shadow:0 0 10px var(--yellow);}
+  .badge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:8px;letter-spacing:1px;margin-left:8px;vertical-align:middle;}
+  .badge-you{background:rgba(0,245,255,.2);border:1px solid var(--cyan);color:var(--cyan);}
+
+  /* Ad banner */
+  .ad-strip{background:rgba(0,0,0,.4);border:1px solid rgba(255,0,110,.15);border-radius:6px;padding:12px;text-align:center;margin:32px 0;}
+  .ad-strip .ad-label{font-family:'Share Tech Mono',monospace;font-size:7px;color:rgba(255,255,255,.2);letter-spacing:2px;margin-bottom:6px;}
+
+  .play-cta{display:block;text-align:center;padding:16px;background:linear-gradient(135deg,var(--pink),#8338ec);color:#fff;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;text-decoration:none;border-radius:6px;margin-top:32px;box-shadow:0 0 20px rgba(255,0,110,.3);transition:.3s;}
+  .play-cta:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(255,0,110,.5);}
+
+  .note{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,.3);text-align:center;margin-top:16px;letter-spacing:1px;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">⚡ CYBER MARIO</a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a>
+    <a href="play.html">PLAY</a>
+    <a href="leaderboard.html" class="active">LEADERBOARD</a>
+    <a href="about.html">ABOUT</a>
+  </div>
+  <a href="play.html" class="nav-play">PLAY NOW ▶</a>
+</nav>
+
+<div class="page">
+  <div class="page-title">🏆 LEADERBOARD</div>
+  <div class="page-sub">TOP RUNNERS IN NEON CITY</div>
+
+  <!-- Your score -->
+  <div class="my-score-card">
+    <div>
+      <div class="msc-label">YOUR BEST SCORE</div>
+      <div class="msc-score" id="myBest">---</div>
+    </div>
+    <div style="text-align:right">
+      <div class="msc-label">YOUR RANK</div>
+      <div class="msc-rank" id="myRank">#—</div>
+    </div>
+  </div>
+
+  <!-- Ad -->
+  <div class="ad-strip">
+    <div class="ad-label">ADVERTISEMENT</div>
+    <a href="https://www.effectivegatecpm.com/rx743m2jk?key=8b4bc3b6c51f69ca62183cec03cd5133"
+       target="_blank" rel="noopener"
+       style="display:inline-block;padding:10px 36px;background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(131,56,236,.2));border:1px solid rgba(255,0,110,.3);color:var(--pink);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;text-decoration:none;border-radius:4px;">
+      ⚡ CLICK TO SUPPORT FREE GAMEPLAY ⚡
+    </a>
+  </div>
+
+  <!-- Leaderboard Table -->
+  <table class="lb-table">
+    <thead>
+      <tr>
+        <th>RANK</th>
+        <th>PLAYER</th>
+        <th>SCORE</th>
+        <th>GEMS</th>
+        <th>DATE</th>
+      </tr>
+    </thead>
+    <tbody id="lbBody">
+      <!-- Populated by JS -->
+    </tbody>
+  </table>
+
+  <a href="play.html" class="play-cta">▶ BEAT THE HIGH SCORE — PLAY NOW</a>
+  <div class="note">* Scores are stored locally on your device. Global leaderboard coming soon.</div>
+</div>
+
+<script>
+// Mock leaderboard data + inject local best
+const mockScores = [
+  {name:'NEO_RUNNER', score:48200, gems:42, date:'2025-01-15'},
+  {name:'CYBER_ACE',  score:41500, gems:38, date:'2025-01-14'},
+  {name:'NEON_DASH',  score:38900, gems:35, date:'2025-01-13'},
+  {name:'GLITCH_PRO', score:35600, gems:31, date:'2025-01-12'},
+  {name:'PIXEL_RUN',  score:32100, gems:28, date:'2025-01-11'},
+  {name:'DARK_MARIO', score:29800, gems:25, date:'2025-01-10'},
+  {name:'SYNC_BLAZE', score:27400, gems:22, date:'2025-01-09'},
+  {name:'VOLT_JUMP',  score:25200, gems:20, date:'2025-01-08'},
+  {name:'WIRE_FIRE',  score:22100, gems:17, date:'2025-01-07'},
+  {name:'NEON_BLADE', score:19600, gems:14, date:'2025-01-06'},
+];
+
+const myBest = parseInt(localStorage.getItem('cm_hi') || '0');
+document.getElementById('myBest').textContent = myBest > 0 ? String(myBest).padStart(5,'0') : '00000';
+
+// Build combined list
+const allScores = [...mockScores];
+if(myBest > 0) {
+  allScores.push({name:'YOU', score:myBest, gems:'—', date:'TODAY', isYou:true});
+}
+allScores.sort((a,b) => b.score - a.score);
+
+// Find user rank
+const myRank = allScores.findIndex(s=>s.isYou) + 1;
+document.getElementById('myRank').textContent = myRank > 0 ? `#${myRank}` : '#—';
+
+// Render
+const tbody = document.getElementById('lbBody');
+allScores.forEach((s, i) => {
+  const rank = i+1;
+  const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;
+  const rowClass = rank<=3 ? `rank-${rank}` : '';
+  const youBadge = s.isYou ? '<span class="badge badge-you">YOU</span>' : '';
+  tbody.innerHTML += `
+    <tr class="${rowClass}">
+      <td class="rank-num">${medal}</td>
+      <td>${s.name}${youBadge}</td>
+      <td class="score-val">${String(s.score).padStart(5,'0')}</td>
+      <td>${s.gems}</td>
+      <td style="color:rgba(255,255,255,.4);font-size:10px">${s.date}</td>
+    </tr>
+  `;
+});
+</script>
+</body>
+</html>

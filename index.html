@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Mario Runner — Free Online Game</title>
+<meta name="description" content="Play Cyber Mario Runner free online! A cyberpunk endless runner with neon pipes, power gems, and double jump. No download needed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<!-- Adsterra Banner Ad Script -->
+<script src="https://pl28792880.effectivegatecpm.com/69/d3/e5/69d3e52d1537e1e4a809105c43df9bb1.js"></script>
+<style>
+  :root {
+    --cyan: #00f5ff; --pink: #ff006e; --yellow: #ffbe0b;
+    --purple: #8338ec; --dark: #020010; --mid: #0a0020;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--dark);
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid */
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 6s linear infinite;
+    z-index: 0; pointer-events:none;
+  }
+  @keyframes gridMove { to { background-position: 50px 50px; } }
+
+  /* Scanlines */
+  body::after {
+    content:''; position:fixed; inset:0;
+    background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
+    pointer-events:none; z-index:1000;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index: 500;
+    background: rgba(2,0,16,0.92);
+    border-bottom: 1px solid rgba(0,245,255,0.2);
+    backdrop-filter: blur(10px);
+    display: flex; align-items:center; justify-content:space-between;
+    padding: 0 40px; height: 60px;
+    box-shadow: 0 0 20px rgba(0,245,255,0.1);
+  }
+  .nav-logo {
+    font-size: 14px; font-weight: 900; color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
+    text-decoration: none; letter-spacing: 2px;
+    animation: glitch 5s ease-in-out infinite;
+  }
+  @keyframes glitch {
+    0%,88%,100%{text-shadow:0 0 10px var(--cyan),0 0 20px var(--cyan);transform:none}
+    90%{text-shadow:-2px 0 var(--pink),2px 0 var(--cyan);transform:skewX(-1deg)}
+    92%{text-shadow:2px 0 var(--pink),-2px 0 var(--cyan);transform:skewX(1deg)}
+  }
+  .nav-links { display:flex; gap:32px; }
+  .nav-links a {
+    font-size: 10px; letter-spacing:2px; color: rgba(255,255,255,0.6);
+    text-decoration:none; transition: color .2s, text-shadow .2s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--cyan); text-shadow: 0 0 8px var(--cyan);
+  }
+  .nav-play-btn {
+    background: var(--pink); color:#fff; border:none;
+    font-family:'Orbitron',monospace; font-size:9px; font-weight:700;
+    letter-spacing:2px; padding:8px 20px; border-radius:3px;
+    cursor:pointer; text-decoration:none;
+    box-shadow: 0 0 15px rgba(255,0,110,0.4);
+    transition: all .2s;
+  }
+  .nav-play-btn:hover { background:#ff3388; box-shadow:0 0 25px rgba(255,0,110,0.7); transform:translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative; z-index:10; padding-top:60px; text-align:center;
+  }
+  .hero-tag {
+    font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:4px;
+    color: var(--pink); text-shadow: 0 0 8px var(--pink);
+    border: 1px solid var(--pink); padding:4px 16px; border-radius:2px;
+    margin-bottom:24px; animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 5px var(--pink)} 50%{box-shadow:0 0 20px var(--pink)} }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 80px); font-weight:900; line-height:1;
+    margin-bottom:10px;
+    background: linear-gradient(135deg, var(--cyan) 0%, #fff 50%, var(--pink) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text;
+    filter: drop-shadow(0 0 30px rgba(0,245,255,0.4));
+  }
+  .hero-sub {
+    font-size: clamp(12px, 2vw, 18px); color: rgba(255,255,255,0.5);
+    letter-spacing:3px; margin-bottom:48px;
+    font-family:'Share Tech Mono',monospace;
+  }
+  .hero-btns { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+  .btn-primary {
+    display:inline-block; padding:16px 40px;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color:#fff; font-family:'Orbitron',monospace; font-size:12px; font-weight:700;
+    letter-spacing:3px; text-decoration:none; border-radius:4px;
+    box-shadow:0 0 30px rgba(255,0,110,0.4);
+    transition:all .3s; cursor:pointer; border:none;
+  }
+  .btn-primary:hover { transform:translateY(-3px); box-shadow:0 8px 40px rgba(255,0,110,0.6); }
+  .btn-secondary {
+    display:inline-block; padding:16px 40px;
+    background:transparent; color:var(--cyan);
+    font-family:'Orbitron',monospace; font-size:12px; font-weight:700;
+    letter-spacing:3px; text-decoration:none; border-radius:4px;
+    border:1px solid var(--cyan);
+    box-shadow:0 0 15px rgba(0,245,255,0.2);
+    transition:all .3s; cursor:pointer;
+  }
+  .btn-secondary:hover { background:rgba(0,245,255,0.1); box-shadow:0 0 30px rgba(0,245,255,0.4); transform:translateY(-3px); }
+
+  /* Floating Mario preview */
+  .hero-canvas-preview {
+    width: min(90vw, 700px); height: 200px;
+    border: 1px solid rgba(0,245,255,0.3);
+    border-radius:8px; margin: 48px auto 0;
+    background: rgba(0,0,16,0.8);
+    display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden;
+    box-shadow: 0 0 40px rgba(0,245,255,0.15);
+  }
+  .preview-text { color:rgba(0,245,255,.4); font-size:10px; letter-spacing:3px; }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+    color:rgba(0,245,255,.4); font-size:9px; letter-spacing:3px;
+    animation: bounce 2s ease-in-out infinite;
+    font-family:'Share Tech Mono',monospace;
+  }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+  /* ── AD BANNER STRIP ── */
+  .ad-banner-strip {
+    position:relative; z-index:10;
+    background: rgba(0,0,0,0.5);
+    border-top:1px solid rgba(255,0,110,0.2);
+    border-bottom:1px solid rgba(255,0,110,0.2);
+    padding: 8px 0; text-align:center;
+    overflow:hidden;
+  }
+  .ad-label {
+    font-family:'Share Tech Mono',monospace; font-size:8px;
+    color:rgba(255,255,255,0.2); letter-spacing:2px; margin-bottom:4px;
+  }
+
+  /* ── FEATURES SECTION ── */
+  .section { position:relative; z-index:10; padding:80px 40px; }
+  .section-title {
+    text-align:center; font-size:clamp(20px,3vw,32px); font-weight:900;
+    letter-spacing:4px; margin-bottom:8px;
+    color:var(--cyan); text-shadow:0 0 20px var(--cyan);
+  }
+  .section-sub {
+    text-align:center; font-family:'Share Tech Mono',monospace;
+    font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:2px; margin-bottom:60px;
+  }
+  .features-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:24px; max-width:1100px; margin:0 auto;
+  }
+  .feature-card {
+    background:rgba(0,245,255,0.04); border:1px solid rgba(0,245,255,0.12);
+    border-radius:8px; padding:32px 24px; text-align:center;
+    transition:all .3s;
+    position:relative; overflow:hidden;
+  }
+  .feature-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+    opacity:0; transition:.3s;
+  }
+  .feature-card:hover { border-color:rgba(0,245,255,0.4); background:rgba(0,245,255,0.08); transform:translateY(-4px); }
+  .feature-card:hover::before { opacity:1; }
+  .feature-icon { font-size:36px; margin-bottom:16px; display:block; }
+  .feature-title { font-size:11px; font-weight:700; letter-spacing:2px; color:var(--cyan); margin-bottom:10px; }
+  .feature-desc { font-family:'Share Tech Mono',monospace; font-size:10px; color:rgba(255,255,255,0.5); line-height:1.7; }
+
+  /* ── HOW TO PLAY ── */
+  .how-section { background:rgba(0,0,20,0.5); }
+  .controls-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:16px; max-width:800px; margin:0 auto;
+  }
+  .control-card {
+    border:1px solid rgba(255,0,110,0.2); border-radius:6px; padding:24px;
+    text-align:center; background:rgba(255,0,110,0.04);
+    transition:.3s;
+  }
+  .control-card:hover { border-color:rgba(255,0,110,0.5); background:rgba(255,0,110,0.08); }
+  .control-key {
+    display:inline-block; padding:6px 14px;
+    border:2px solid var(--cyan); border-radius:4px;
+    font-family:'Share Tech Mono',monospace; font-size:13px; color:var(--cyan);
+    text-shadow:0 0 8px var(--cyan); margin-bottom:12px;
+    box-shadow:0 0 10px rgba(0,245,255,0.2);
+  }
+  .control-desc { font-family:'Share Tech Mono',monospace; font-size:10px; color:rgba(255,255,255,0.5); letter-spacing:1px; }
+
+  /* ── LEADERBOARD TEASER ── */
+  .stats-row {
+    display:flex; justify-content:center; gap:60px; flex-wrap:wrap;
+    max-width:800px; margin:0 auto;
+  }
+  .stat-block { text-align:center; }
+  .stat-num {
+    font-size:clamp(32px,5vw,56px); font-weight:900; color:var(--yellow);
+    text-shadow:0 0 20px var(--yellow); font-family:'Share Tech Mono',monospace;
+  }
+  .stat-label { font-size:9px; letter-spacing:3px; color:rgba(255,255,255,0.4); margin-top:4px; }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align:center; padding:100px 40px;
+    background:linear-gradient(180deg,transparent,rgba(0,0,30,0.8));
+  }
+  .cta-section h2 {
+    font-size:clamp(24px,4vw,48px); font-weight:900; margin-bottom:16px;
+    color:var(--pink); text-shadow:0 0 30px var(--pink);
+  }
+  .cta-section p { font-family:'Share Tech Mono',monospace; font-size:12px; color:rgba(255,255,255,.4); margin-bottom:40px; letter-spacing:2px; }
+
+  /* ── FOOTER ── */
+  footer {
+    position:relative; z-index:10;
+    border-top:1px solid rgba(0,245,255,0.1);
+    padding:40px; text-align:center;
+    background:rgba(0,0,0,0.5);
+  }
+  .footer-logo { font-size:16px; font-weight:900; color:var(--cyan); text-shadow:0 0 10px var(--cyan); margin-bottom:16px; }
+  .footer-links { display:flex; gap:32px; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+  .footer-links a { font-size:9px; letter-spacing:2px; color:rgba(255,255,255,.4); text-decoration:none; transition:.2s; }
+  .footer-links a:hover { color:var(--cyan); }
+  .footer-copy { font-family:'Share Tech Mono',monospace; font-size:9px; color:rgba(255,255,255,.2); letter-spacing:1px; }
+
+  /* Neon divider */
+  .neon-line { height:1px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); margin:0; }
+
+  /* Floating particles bg effect */
+  .particle { position:fixed; pointer-events:none; z-index:2; border-radius:50%; animation:float linear infinite; }
+  @keyframes float { 0%{transform:translateY(100vh) scale(0);opacity:0} 10%{opacity:.6} 90%{opacity:.6} 100%{transform:translateY(-10vh) scale(1);opacity:0} }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">⚡ CYBER MARIO</a>
+  <div class="nav-links">
+    <a href="index.html" class="active">HOME</a>
+    <a href="play.html">PLAY</a>
+    <a href="leaderboard.html">LEADERBOARD</a>
+    <a href="about.html">ABOUT</a>
+  </div>
+  <a href="play.html" class="nav-play-btn">PLAY NOW ▶</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">FREE ONLINE GAME</div>
+  <h1>CYBER MARIO<br>RUNNER</h1>
+  <p class="hero-sub">NEON CITY · ENDLESS RUNNER · DOUBLE JUMP</p>
+  <div class="hero-btns">
+    <a href="play.html" class="btn-primary">▶ PLAY NOW — FREE</a>
+    <a href="#features" class="btn-secondary">HOW TO PLAY ↓</a>
+  </div>
+  <div class="scroll-hint">▼ SCROLL DOWN ▼</div>
+</section>
+
+<!-- AD BANNER -->
+<div class="ad-banner-strip">
+  <div class="ad-label">ADVERTISEMENT</div>
+  <!-- Adsterra Direct Link Banner Area -->
+  <div style="min-height:90px;display:flex;align-items:center;justify-content:center;">
+    <a href="https://www.effectivegatecpm.com/rx743m2jk?key=8b4bc3b6c51f69ca62183cec03cd5133" target="_blank" rel="noopener" style="display:inline-block;padding:12px 40px;background:linear-gradient(135deg,#ff006e,#8338ec);color:#fff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;text-decoration:none;border-radius:4px;box-shadow:0 0 20px rgba(255,0,110,0.4);">
+      ⚡ SPONSORED — CLICK TO LEARN MORE ⚡
+    </a>
+  </div>
+</div>
+
+<div class="neon-line"></div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-title">GAME FEATURES</div>
+  <div class="section-sub">WHAT MAKES CYBER MARIO DIFFERENT</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">DOUBLE JUMP</div>
+      <div class="feature-desc">Chain two jumps mid-air to clear even the tallest neon pipes. Precision timing is key.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏙️</span>
+      <div class="feature-title">NEON CITYSCAPE</div>
+      <div class="feature-desc">Run through a stunning cyberpunk city with parallax buildings, blinking windows, and neon antennas.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✦</span>
+      <div class="feature-title">POWER GEMS</div>
+      <div class="feature-desc">Collect glowing power gems for bonus score. Each gem adds +100 points to your run.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">❤️</span>
+      <div class="feature-title">3 LIVES SYSTEM</div>
+      <div class="feature-desc">You get 3 lives per run. Hit a pipe and survive — but each hit triggers a brief cooldown.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🚀</span>
+      <div class="feature-title">SPEED ESCALATION</div>
+      <div class="feature-desc">The game gets progressively faster the longer you survive. How far can you go?</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌙</span>
+      <div class="feature-title">NIGHT MODE</div>
+      <div class="feature-desc">After 700 points the city goes dark — moon rises, stars twinkle, neon glows brighter.</div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-line"></div>
+
+<!-- HOW TO PLAY -->
+<section class="section how-section">
+  <div class="section-title">HOW TO PLAY</div>
+  <div class="section-sub">MASTER THE CONTROLS</div>
+  <div class="controls-grid">
+    <div class="control-card">
+      <div class="control-key">SPACE</div>
+      <div class="control-desc">JUMP / START GAME</div>
+    </div>
+    <div class="control-card">
+      <div class="control-key">↑ UP</div>
+      <div class="control-desc">JUMP (ALTERNATIVE)</div>
+    </div>
+    <div class="control-card">
+      <div class="control-key">↓ DOWN</div>
+      <div class="control-desc">DUCK UNDER PIPES</div>
+    </div>
+    <div class="control-card">
+      <div class="control-key">TAP</div>
+      <div class="control-desc">CLICK / TOUCH TO JUMP</div>
+    </div>
+    <div class="control-card">
+      <div class="control-key">2× SPACE</div>
+      <div class="control-desc">DOUBLE JUMP MID-AIR</div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-line"></div>
+
+<!-- STATS -->
+<section class="section">
+  <div class="section-title">STATS</div>
+  <div class="section-sub">THE NUMBERS</div>
+  <div class="stats-row">
+    <div class="stat-block"><div class="stat-num">∞</div><div class="stat-label">PIPES TO DODGE</div></div>
+    <div class="stat-block"><div class="stat-num">3</div><div class="stat-label">LIVES PER RUN</div></div>
+    <div class="stat-block"><div class="stat-num">4</div><div class="stat-label">PIPE VARIANTS</div></div>
+    <div class="stat-block"><div class="stat-num">FREE</div><div class="stat-label">FOREVER</div></div>
+  </div>
+</section>
+
+<!-- AD BANNER 2 -->
+<div class="ad-banner-strip">
+  <div class="ad-label">ADVERTISEMENT</div>
+  <div style="min-height:90px;display:flex;align-items:center;justify-content:center;">
+    <a href="https://www.effectivegatecpm.com/rx743m2jk?key=8b4bc3b6c51f69ca62183cec03cd5133" target="_blank" rel="noopener" style="display:inline-block;padding:12px 40px;background:linear-gradient(135deg,#8338ec,#00f5ff);color:#fff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;text-decoration:none;border-radius:4px;box-shadow:0 0 20px rgba(131,56,236,0.4);">
+      ⚡ SPONSORED — CLICK TO EXPLORE ⚡
+    </a>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>READY TO RUN?</h2>
+  <p>NO DOWNLOAD. NO SIGN-UP. JUST PLAY.</p>
+  <a href="play.html" class="btn-primary" style="font-size:14px;padding:20px 60px;">▶ START PLAYING NOW</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">⚡ CYBER MARIO RUNNER</div>
+  <div class="footer-links">
+    <a href="index.html">HOME</a>
+    <a href="play.html">PLAY</a>
+    <a href="leaderboard.html">LEADERBOARD</a>
+    <a href="about.html">ABOUT</a>
+    <a href="privacy.html">PRIVACY</a>
+  </div>
+  <div class="footer-copy">© 2025 CYBER MARIO RUNNER · FREE ONLINE GAME · ALL RIGHTS RESERVED</div>
+</footer>
+
+</body>
+</html>

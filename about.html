@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Cyber Mario Runner</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script src="https://pl28792880.effectivegatecpm.com/69/d3/e5/69d3e52d1537e1e4a809105c43df9bb1.js"></script>
+<style>
+  :root{--cyan:#00f5ff;--pink:#ff006e;--yellow:#ffbe0b;--dark:#020010;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--dark);color:#fff;font-family:'Orbitron',monospace;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:50px 50px;animation:gm 6s linear infinite;z-index:0;pointer-events:none;}
+  @keyframes gm{to{background-position:50px 50px;}}
+  body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);pointer-events:none;z-index:1000;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:500;background:rgba(2,0,16,.92);border-bottom:1px solid rgba(0,245,255,.2);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;}
+  .nav-logo{font-size:13px;font-weight:900;color:var(--cyan);text-shadow:0 0 10px var(--cyan);text-decoration:none;letter-spacing:2px;}
+  .nav-links{display:flex;gap:28px;}
+  .nav-links a{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.5);text-decoration:none;transition:.2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
+  .nav-play{background:var(--pink);color:#fff;border:none;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;letter-spacing:2px;padding:8px 20px;border-radius:3px;cursor:pointer;text-decoration:none;box-shadow:0 0 15px rgba(255,0,110,.4);transition:.2s;}
+  .nav-play:hover{background:#ff3388;}
+  .page{position:relative;z-index:10;padding:90px 40px 80px;max-width:800px;margin:0 auto;}
+  .page-title{font-size:clamp(24px,4vw,48px);font-weight:900;color:var(--cyan);text-shadow:0 0 20px var(--cyan);letter-spacing:4px;margin-bottom:4px;}
+  .neon-line{height:2px;background:linear-gradient(90deg,var(--cyan),var(--pink),transparent);margin:24px 0 40px;}
+  .section{margin-bottom:56px;}
+  .section h2{font-size:14px;color:var(--pink);text-shadow:0 0 10px var(--pink);letter-spacing:3px;margin-bottom:16px;}
+  .section p{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(255,255,255,.6);line-height:2;margin-bottom:12px;}
+  .highlight{color:var(--cyan);}
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:16px;}
+  .info-card{background:rgba(0,245,255,.04);border:1px solid rgba(0,245,255,.12);border-radius:6px;padding:20px;}
+  .info-card h3{font-size:10px;color:var(--yellow);letter-spacing:2px;margin-bottom:8px;}
+  .info-card p{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);line-height:1.8;}
+  .ad-strip{background:rgba(0,0,0,.4);border:1px solid rgba(255,0,110,.15);border-radius:6px;padding:12px;text-align:center;margin:32px 0;}
+  .ad-label{font-family:'Share Tech Mono',monospace;font-size:7px;color:rgba(255,255,255,.2);letter-spacing:2px;margin-bottom:6px;}
+  .play-cta{display:block;text-align:center;padding:16px;background:linear-gradient(135deg,var(--pink),#8338ec);color:#fff;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;text-decoration:none;border-radius:6px;margin-top:40px;box-shadow:0 0 20px rgba(255,0,110,.3);transition:.3s;}
+  .play-cta:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(255,0,110,.5);}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">⚡ CYBER MARIO</a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a>
+    <a href="play.html">PLAY</a>
+    <a href="leaderboard.html">LEADERBOARD</a>
+    <a href="about.html" class="active">ABOUT</a>
+  </div>
+  <a href="play.html" class="nav-play">PLAY NOW ▶</a>
+</nav>
+
+<div class="page">
+  <div class="page-title">ABOUT</div>
+  <div class="neon-line"></div>
+
+  <div class="section">
+    <h2>WHAT IS CYBER MARIO RUNNER?</h2>
+    <p>
+      <span class="highlight">Cyber Mario Runner</span> is a free browser-based endless runner game inspired
+      by the classic Chrome offline dinosaur game — but fully reimagined in a neon cyberpunk world.
+    </p>
+    <p>
+      Instead of a dinosaur hopping over cacti, you control a <span class="highlight">cyberpunk-armored Mario</span>
+      sprinting through a glowing neon city, leaping over illuminated pipe obstacles in four vivid color variants.
+    </p>
+    <p>
+      No download needed. No account required. Just open the page and start running.
+    </p>
+  </div>
+
+  <div class="ad-strip">
+    <div class="ad-label">ADVERTISEMENT</div>
+    <a href="https://www.effectivegatecpm.com/rx743m2jk?key=8b4bc3b6c51f69ca62183cec03cd5133"
+       target="_blank" rel="noopener"
+       style="display:inline-block;padding:10px 36px;background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(131,56,236,.2));border:1px solid rgba(255,0,110,.3);color:var(--pink);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;text-decoration:none;border-radius:4px;">
+      ⚡ SPONSORED — CLICK TO EXPLORE ⚡
+    </a>
+  </div>
+
+  <div class="section">
+    <h2>GAME DETAILS</h2>
+    <div class="card-grid">
+      <div class="info-card">
+        <h3>ENGINE</h3>
+        <p>Pure HTML5 Canvas. No frameworks, no libraries. Runs at 60fps in any modern browser.</p>
+      </div>
+      <div class="info-card">
+        <h3>CONTROLS</h3>
+        <p>SPACE / Arrow Up to jump. Arrow Down to duck. Click or tap also works. Double jump enabled.</p>
+      </div>
+      <div class="info-card">
+        <h3>SCORING</h3>
+        <p>+1 point per frame survived. +100 points per gem collected. Speed increases over time.</p>
+      </div>
+      <div class="info-card">
+        <h3>LIVES</h3>
+        <p>3 lives per run. Hitting a pipe costs one life. Ads show between lives to keep the game free.</p>
+      </div>
+      <div class="info-card">
+        <h3>NIGHT MODE</h3>
+        <p>After 700 points the city switches to full night mode — darker sky, brighter neon glow.</p>
+      </div>
+      <div class="info-card">
+        <h3>HIGH SCORE</h3>
+        <p>Your best score is saved locally in your browser via localStorage. No account needed.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>HOW ADS WORK</h2>
+    <p>
+      Cyber Mario Runner is completely free to play. We show ads when you lose a life or when the game ends
+      to keep the game available at no cost. Ads are served by <span class="highlight">Adsterra</span>.
+    </p>
+    <p>
+      You can skip the ad after a short countdown. Clicking the ad supports the game's development and hosting.
+      Thank you for playing!
+    </p>
+  </div>
+
+  <a href="play.html" class="play-cta">▶ START PLAYING — IT'S FREE</a>
+</div>
+</body>
+</html>

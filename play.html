@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play Cyber Mario Runner — Free Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<!-- Adsterra Banner -->
+<script src="https://pl28792880.effectivegatecpm.com/69/d3/e5/69d3e52d1537e1e4a809105c43df9bb1.js"></script>
+<style>
+  :root { --cyan:#00f5ff; --pink:#ff006e; --yellow:#ffbe0b; --dark:#020010; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body {
+    width:100%; height:100%;
+    background:var(--dark);
+    font-family:'Orbitron',monospace;
+    overflow-x:hidden;
+    color:#fff;
+  }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,245,255,0.04) 1px,transparent 1px);
+    background-size:50px 50px;
+    animation:gm 6s linear infinite; z-index:0; pointer-events:none;
+  }
+  @keyframes gm{to{background-position:50px 50px;}}
+  body::after {
+    content:''; position:fixed; inset:0;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);
+    pointer-events:none; z-index:1000;
+  }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:500;
+    background:rgba(2,0,16,.92); border-bottom:1px solid rgba(0,245,255,.2);
+    backdrop-filter:blur(10px);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 40px; height:56px;
+  }
+  .nav-logo { font-size:13px; font-weight:900; color:var(--cyan); text-shadow:0 0 10px var(--cyan); text-decoration:none; letter-spacing:2px; }
+  .nav-links { display:flex; gap:28px; }
+  .nav-links a { font-size:9px; letter-spacing:2px; color:rgba(255,255,255,.5); text-decoration:none; transition:.2s; }
+  .nav-links a:hover, .nav-links a.active { color:var(--cyan); text-shadow:0 0 8px var(--cyan); }
+  .nav-back { background:rgba(0,245,255,.1); border:1px solid var(--cyan); color:var(--cyan); font-family:'Orbitron',monospace; font-size:9px; letter-spacing:2px; padding:6px 16px; border-radius:3px; text-decoration:none; transition:.2s; }
+  .nav-back:hover { background:rgba(0,245,255,.2); }
+
+  /* PAGE LAYOUT */
+  .page-wrap {
+    position:relative; z-index:10;
+    min-height:100vh; padding-top:56px;
+    display:flex; flex-direction:column; align-items:center;
+  }
+
+  /* AD TOP STRIP */
+  .ad-top {
+    width:100%; background:rgba(0,0,0,.5);
+    border-bottom:1px solid rgba(255,0,110,.15);
+    padding:6px 0; text-align:center;
+  }
+  .ad-label { font-family:'Share Tech Mono',monospace; font-size:7px; color:rgba(255,255,255,.2); letter-spacing:2px; margin-bottom:3px; }
+
+  /* GAME SECTION */
+  .game-section {
+    width:100%; display:flex; flex-direction:column; align-items:center;
+    padding:24px 20px;
+  }
+
+  /* HUD */
+  .hud {
+    display:flex; justify-content:space-between; align-items:center;
+    width:90vw; max-width:1400px; padding:10px 20px;
+    background:rgba(0,0,0,.75);
+    border:1px solid var(--cyan); border-bottom:none; border-radius:4px 4px 0 0;
+    box-shadow:0 0 20px rgba(0,245,255,.3),inset 0 0 20px rgba(0,245,255,.05);
+  }
+  .htitle {
+    font-size:11px; font-weight:900; color:var(--cyan); letter-spacing:3px;
+    text-shadow:0 0 10px var(--cyan),0 0 20px var(--cyan);
+    animation:glitch 4s ease-in-out infinite;
+  }
+  @keyframes glitch {
+    0%,90%,100%{text-shadow:0 0 10px var(--cyan),0 0 20px var(--cyan);transform:none}
+    92%{text-shadow:-2px 0 var(--pink),2px 0 var(--cyan);transform:skewX(-1deg)}
+    94%{text-shadow:2px 0 var(--pink),-2px 0 var(--cyan);transform:skewX(1deg)}
+  }
+  .hscores { display:flex; gap:28px; }
+  .sb { text-align:center; }
+  .sl { font-family:'Share Tech Mono',monospace; font-size:7px; color:rgba(0,245,255,.55); letter-spacing:2px; margin-bottom:2px; }
+  .sv { font-size:15px; font-weight:700; color:var(--yellow); text-shadow:0 0 8px var(--yellow); font-family:'Share Tech Mono',monospace; }
+  .hlives { font-size:17px; }
+
+  /* CANVAS WRAP */
+  .cw {
+    position:relative;
+    width:90vw; max-width:1400px;
+    box-shadow:0 0 0 1px var(--cyan),0 0 30px rgba(0,245,255,.4),0 0 60px rgba(0,245,255,.15);
+  }
+  .cn { position:absolute; width:12px; height:12px; border-color:var(--pink); border-style:solid; }
+  .cn.tl{top:0;left:0;border-width:2px 0 0 2px;}
+  .cn.tr{top:0;right:0;border-width:2px 2px 0 0;}
+  .cn.bl{bottom:0;left:0;border-width:0 0 2px 2px;}
+  .cn.br{bottom:0;right:0;border-width:0 2px 2px 0;}
+  canvas { display:block; image-rendering:pixelated; width:100%; height:auto; }
+
+  /* BOTTOM BAR */
+  .bb {
+    width:90vw; max-width:1400px; padding:6px 20px;
+    background:rgba(0,0,0,.75);
+    border:1px solid var(--cyan); border-top:1px solid rgba(0,245,255,.25);
+    border-radius:0 0 4px 4px;
+    display:flex; justify-content:center; gap:32px;
+  }
+  .kh { font-family:'Share Tech Mono',monospace; font-size:9px; color:rgba(0,245,255,.5); letter-spacing:1px; }
+  .kh kbd { background:rgba(0,245,255,.12); border:1px solid var(--cyan); padding:1px 5px; border-radius:3px; color:var(--cyan); font-family:inherit; }
+
+  /* SIDE ADS */
+  .game-row {
+    display:flex; align-items:flex-start; gap:16px; width:100%; justify-content:center; padding:0 20px;
+  }
+  .side-ad {
+    width:160px; flex-shrink:0;
+    background:rgba(0,0,0,.4); border:1px solid rgba(0,245,255,.1); border-radius:6px;
+    padding:12px; text-align:center; margin-top:56px;
+  }
+  .side-ad-label { font-family:'Share Tech Mono',monospace; font-size:7px; color:rgba(255,255,255,.2); letter-spacing:1px; margin-bottom:8px; }
+  .side-ad-link {
+    display:block; padding:10px 8px;
+    background:linear-gradient(135deg,rgba(255,0,110,.15),rgba(131,56,236,.15));
+    border:1px solid rgba(255,0,110,.3); border-radius:4px;
+    color:var(--pink); font-size:9px; letter-spacing:1px; text-decoration:none;
+    transition:.2s; margin-bottom:8px;
+  }
+  .side-ad-link:hover { background:linear-gradient(135deg,rgba(255,0,110,.3),rgba(131,56,236,.3)); }
+
+  /* AD OVERLAY - shown on death/life lost */
+  #adOverlay {
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(2,0,16,.95);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .4s;
+    backdrop-filter:blur(8px);
+  }
+  #adOverlay.visible {
+    opacity:1; pointer-events:all;
+  }
+  .ad-overlay-title {
+    font-size:clamp(18px,3vw,32px); font-weight:900;
+    color:var(--pink); text-shadow:0 0 30px var(--pink);
+    margin-bottom:8px; letter-spacing:4px;
+  }
+  .ad-overlay-sub {
+    font-family:'Share Tech Mono',monospace; font-size:10px;
+    color:rgba(255,255,255,.4); letter-spacing:2px; margin-bottom:32px;
+  }
+  .ad-overlay-box {
+    background:rgba(0,0,0,.6); border:1px solid rgba(0,245,255,.2);
+    border-radius:12px; padding:40px; width:min(90vw,600px);
+    text-align:center; position:relative;
+    box-shadow:0 0 60px rgba(0,245,255,.1);
+  }
+  .ad-box-label { font-family:'Share Tech Mono',monospace; font-size:8px; color:rgba(255,255,255,.3); letter-spacing:2px; margin-bottom:16px; }
+  .ad-main-link {
+    display:block; padding:20px 40px; margin:0 auto 24px;
+    background:linear-gradient(135deg,var(--pink),var(--purple));
+    color:#fff; font-family:'Orbitron',monospace; font-size:12px; font-weight:700;
+    letter-spacing:2px; text-decoration:none; border-radius:6px;
+    box-shadow:0 0 30px rgba(255,0,110,.5);
+    transition:.3s; max-width:400px;
+  }
+  .ad-main-link:hover { transform:translateY(-2px); box-shadow:0 6px 40px rgba(255,0,110,.7); }
+  .ad-skip-row { display:flex; align-items:center; justify-content:center; gap:16px; }
+  #adSkipBtn {
+    padding:10px 28px; background:transparent;
+    border:1px solid var(--cyan); border-radius:4px;
+    color:var(--cyan); font-family:'Orbitron',monospace; font-size:9px; letter-spacing:2px;
+    cursor:pointer; transition:.2s;
+  }
+  #adSkipBtn:disabled { opacity:.4; cursor:not-allowed; color:rgba(255,255,255,.3); border-color:rgba(255,255,255,.2); }
+  #adSkipBtn:not(:disabled):hover { background:rgba(0,245,255,.1); }
+  #adCountdown {
+    font-family:'Share Tech Mono',monospace; font-size:22px;
+    color:var(--yellow); text-shadow:0 0 10px var(--yellow); width:32px; text-align:center;
+  }
+
+  /* BOTTOM AD SECTION */
+  .bottom-ad-section {
+    width:100%; padding:16px 20px; background:rgba(0,0,0,.4);
+    border-top:1px solid rgba(255,0,110,.15); text-align:center; margin-top:auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">⚡ CYBER MARIO</a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a>
+    <a href="play.html" class="active">PLAY</a>
+    <a href="leaderboard.html">LEADERBOARD</a>
+    <a href="about.html">ABOUT</a>
+  </div>
+  <a href="index.html" class="nav-back">← BACK</a>
+</nav>
+
+<!-- AD OVERLAY (shown on death / life lost) -->
+<div id="adOverlay">
+  <div class="ad-overlay-title">GAME PAUSED</div>
+  <div class="ad-overlay-sub">WATCH A QUICK AD TO CONTINUE</div>
+  <div class="ad-overlay-box">
+    <div class="ad-box-label">ADVERTISEMENT · SUPPORTS FREE GAMEPLAY</div>
+    <a href="https://www.effectivegatecpm.com/rx743m2jk?key=8b4bc3b6c51f69ca62183cec03cd5133"
+       target="_blank" rel="noopener" class="ad-main-link">
+      ⚡ CLICK HERE TO SUPPORT CYBER MARIO ⚡
+    </a>
+    <div class="ad-skip-row">
+      <span id="adCountdown">5</span>
+      <button id="adSkipBtn" onclick="window.closeAd()" disabled>SKIP IN 5...</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE CONTENT -->
+<div class="page-wrap">
+
+  <!-- TOP AD STRIP -->
+  <div class="ad-top" style="width:100%">
+    <div class="ad-label">ADVERTISEMENT</div>
+    <a href="https://www.effectivegatecpm.com/rx743m2jk?key=8b4bc3b6c51f69ca62183cec03cd5133"
+       target="_blank" rel="noopener"
+       style="display:inline-block;padding:8px 32px;background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(131,56,236,.2));border:1px solid rgba(255,0,110,.3);color:var(--pink);font-size:9px;letter-spacing:2px;text-decoration:none;border-radius:3px;">
+      ⚡ SPONSORED CONTENT — CLICK TO VISIT ⚡
+    </a>
+  </div>
+
+  <!-- GAME SECTION -->
+  <div class="game-section">
+    <!-- HUD -->
+    <div class="hud">
+      <div class="htitle">⚡ CYBER MARIO</div>
+      <div class="hscores">
+        <div class="sb"><div class="sl">SCORE</div><div class="sv" id="sScore">00000</div></div>
+        <div class="sb"><div class="sl">BEST</div><div class="sv" id="sBest">00000</div></div>
+        <div class="sb"><div class="sl">GEMS</div><div class="sv" id="sGems">00</div></div>
+      </div>
+      <div class="hlives" id="sLives">❤️❤️❤️</div>
+    </div>
+
+    <!-- CANVAS -->
+    <div class="cw">
+      <div class="cn tl"></div><div class="cn tr"></div>
+      <div class="cn bl"></div><div class="cn br"></div>
+      <canvas id="c" width="1400" height="420"></canvas>
+    </div>
+
+    <!-- BOTTOM CONTROLS BAR -->
+    <div class="bb">
+      <span class="kh"><kbd>SPACE</kbd>/<kbd>↑</kbd> Jump · Double Jump ON</span>
+      <span class="kh"><kbd>↓</kbd> Duck</span>
+      <span class="kh">CLICK / TAP also works</span>
+    </div>
+  </div>
+
+  <!-- BOTTOM AD -->
+  <div class="bottom-ad-section">
+    <div class="ad-label" style="margin-bottom:6px;">ADVERTISEMENT</div>
+    <a href="https://www.effectivegatecpm.com/rx743m2jk?key=8b4bc3b6c51f69ca62183cec03cd5133"
+       target="_blank" rel="noopener"
+       style="display:inline-block;padding:12px 48px;background:linear-gradient(135deg,var(--pink),#8338ec);color:#fff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;text-decoration:none;border-radius:4px;box-shadow:0 0 20px rgba(255,0,110,.3);">
+      ⚡ SPONSORED — CLICK TO EXPLORE ⚡
+    </a>
+  </div>
+
+</div>
+
+<script src="assets/game.js"></script>
+</body>
+</html>
